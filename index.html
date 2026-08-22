@@ -3,12 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
 <title>You're Invited</title>
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;min-height:100%;}
-body{min-height:100vh;min-height:100svh;font-family:Georgia,"Times New Roman",serif;background:linear-gradient(135deg,#f8efe5,#efe0d0);color:#3b3028;display:flex;align-items:center;justify-content:center;padding:20px}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{min-height:100vh;min-height:100svh;font-family:Georgia,"Times New Roman",serif;background:linear-gradient(135deg,#f8efe5,#efe0d0);color:#3b3028;display:flex;align-items:center;justify-content:center;padding:18px}
 .card{width:min(680px,100%);background:rgba(255,255,255,.97);border-radius:24px;padding:48px 28px;text-align:center;box-shadow:0 20px 60px rgba(70,45,25,.16);border:1px solid rgba(120,90,60,.12)}
 .eyebrow{letter-spacing:4px;text-transform:uppercase;font-family:Arial,sans-serif;font-size:12px;color:#7a61d1;margin-bottom:18px}
 h1{font-size:clamp(42px,12vw,68px);margin:0 0 14px;font-weight:500}
@@ -17,20 +16,11 @@ h1{font-size:clamp(42px,12vw,68px);margin:0 0 14px;font-weight:500}
 .detail{background:#faf5ef;border-radius:14px;padding:17px 8px}
 .detail strong{display:block;font-family:Arial,sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:1.4px;color:#7a61d1;margin-bottom:8px}
 .detail span{font-size:16px}
-.name{width:100%;max-width:420px;padding:16px 18px;border:1px solid #d8c8b8;border-radius:999px;font-size:17px;outline:none;margin-bottom:16px;-webkit-appearance:none;appearance:none;background:#fff}
+.name{width:100%;max-width:420px;padding:16px 18px;border:1px solid #d8c8b8;border-radius:999px;font-size:17px;outline:none;margin-bottom:16px;background:#fff;-webkit-appearance:none}
 .buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.rsvp{display:inline-block;border:0;border-radius:999px;padding:17px 28px;background:#6f5039;color:#fff;font-size:16px;font-weight:700;cursor:pointer;min-height:54px;min-width:150px;-webkit-appearance:none;appearance:none;touch-action:manipulation;user-select:none;-webkit-user-select:none;box-shadow:0 8px 20px rgba(111,80,57,.22)}
+.rsvp{display:inline-block;border:0;border-radius:999px;padding:17px 28px;background:#6f5039;color:#fff;font-size:16px;font-weight:700;cursor:pointer;min-height:54px;min-width:150px;-webkit-appearance:none;appearance:none;touch-action:manipulation}
 .rsvp.no{background:#8a7768}
-.rsvp:active{transform:scale(.98)}
-.rsvp:disabled{opacity:.55}
-#confirmation{display:none;margin-top:20px;padding:15px;border-radius:12px;background:#edf5ed;color:#3f6544;font-family:Arial,sans-serif;font-size:14px;line-height:1.5}
-#rsvpFrame{display:none;width:0;height:0;border:0}
-@media(max-width:600px){
- body{padding:14px;align-items:center}
- .card{padding:38px 20px;border-radius:20px}
- .details{grid-template-columns:1fr}
- .rsvp{width:100%;max-width:340px}
-}
+@media(max-width:600px){.details{grid-template-columns:1fr}.rsvp{width:100%;max-width:340px}}
 </style>
 </head>
 <body>
@@ -45,63 +35,13 @@ h1{font-size:clamp(42px,12vw,68px);margin:0 0 14px;font-weight:500}
 <div class="detail"><strong>Venue</strong><span>Farhan Banquet</span></div>
 </section>
 
-<form id="rsvpForm" action="https://script.google.com/macros/s/AKfycbxhNeKP-pk3qcqTR5AmSZDb6v6MvxE32pWUqkYx5Ur2lZSi8QrdmMAoAcfJMvd4kW1o/exec" method="GET" target="rsvpFrame" autocomplete="on">
-<input class="name" id="guestName" name="name" type="text" placeholder="Enter your name" autocomplete="name" required>
+<form action="https://script.google.com/macros/s/AKfycbxhNeKP-pk3qcqTR5AmSZDb6v6MvxE32pWUqkYx5Ur2lZSi8QrdmMAoAcfJMvd4kW1o/exec" method="GET">
+<input class="name" name="name" type="text" placeholder="Enter your name" autocomplete="name" required>
 <div class="buttons">
 <button class="rsvp" type="submit" name="status" value="Attending">✓ I'll Attend</button>
 <button class="rsvp no" type="submit" name="status" value="Not Attending">🙏 Sorry, I Can't Attend</button>
 </div>
 </form>
-
-<iframe name="rsvpFrame" id="rsvpFrame" title="RSVP submission"></iframe>
-<div id="confirmation" role="status" aria-live="polite"></div>
 </main>
-
-<script>
-(function() {
-  var form = document.getElementById("rsvpForm");
-  var nameInput = document.getElementById("guestName");
-  var confirmation = document.getElementById("confirmation");
-
-  form.addEventListener("submit", function(e) {
-    var name = nameInput.value.trim();
-
-    if (!name) {
-      e.preventDefault();
-      alert("Please enter your name before confirming your response.");
-      nameInput.focus();
-      return;
-    }
-
-    var clicked = document.activeElement;
-    var status = clicked && clicked.value ? clicked.value : "Attending";
-
-    /*
-      IMPORTANT:
-      Do not disable the input or submit button here.
-      The browser still needs them to be included in the
-      native form submission.
-    */
-
-    confirmation.style.display = "block";
-
-    if (status === "Attending") {
-      confirmation.innerHTML =
-        "Thank you, <strong>" +
-        escapeHtml(name) +
-        "!</strong> We’re delighted that you’ll be joining us. See you at Farhan Banquet!";
-    } else {
-      confirmation.innerHTML =
-        "Thank you, <strong>" +
-        escapeHtml(name) +
-        ".</strong> We’re sorry you won’t be able to join us, and we appreciate you letting us know.";
-    }
-  });
-
-  function escapeHtml(text) {
-    var div = document.createElement("div");
-    div.textContent = text;
-    return div.innerHTML;
-  }
-})();
-</script>
+</body>
+</html>
