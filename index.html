@@ -62,12 +62,13 @@ h1{font-size:clamp(42px,12vw,68px);margin:0 0 14px;font-weight:500}
   var form = document.getElementById("rsvpForm");
   var nameInput = document.getElementById("guestName");
   var confirmation = document.getElementById("confirmation");
-  var buttons = document.querySelectorAll(".rsvp");
 
   form.addEventListener("submit", function(e) {
     var name = nameInput.value.trim();
+
     if (!name) {
       e.preventDefault();
+      alert("Please enter your name before confirming your response.");
       nameInput.focus();
       return;
     }
@@ -75,18 +76,25 @@ h1{font-size:clamp(42px,12vw,68px);margin:0 0 14px;font-weight:500}
     var clicked = document.activeElement;
     var status = clicked && clicked.value ? clicked.value : "Attending";
 
-    buttons.forEach(function(button) {
-      button.disabled = true;
-    });
-    nameInput.disabled = true;
+    /*
+      IMPORTANT:
+      Do not disable the input or submit button here.
+      The browser still needs them to be included in the
+      native form submission.
+    */
 
     confirmation.style.display = "block";
-    confirmation.innerHTML = "Thank you, <strong>" + escapeHtml(name) + "!</strong> Your response is being recorded.";
 
     if (status === "Attending") {
-      confirmation.innerHTML = "Thank you, <strong>" + escapeHtml(name) + "!</strong> We’re delighted that you’ll be joining us. See you at Farhan Banquet!";
+      confirmation.innerHTML =
+        "Thank you, <strong>" +
+        escapeHtml(name) +
+        "!</strong> We’re delighted that you’ll be joining us. See you at Farhan Banquet!";
     } else {
-      confirmation.innerHTML = "Thank you, <strong>" + escapeHtml(name) + ".</strong> We’re sorry you won’t be able to join us, and we appreciate you letting us know.";
+      confirmation.innerHTML =
+        "Thank you, <strong>" +
+        escapeHtml(name) +
+        ".</strong> We’re sorry you won’t be able to join us, and we appreciate you letting us know.";
     }
   });
 
@@ -97,5 +105,3 @@ h1{font-size:clamp(42px,12vw,68px);margin:0 0 14px;font-weight:500}
   }
 })();
 </script>
-</body>
-</html>
